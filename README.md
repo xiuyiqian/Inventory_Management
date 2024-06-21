@@ -2,7 +2,7 @@
 
 This project is an Inventory Management System designed to handle products and orders within an e-commerce platform. The design is based on the architecture depicted in the diagram below.
 
-![Solution Architecture](./Inventory_Mangement.png)
+<img src="./Inventory_Mangement.png" alt="Solution Architecture" style="width:100%;">
 
 ## Overview
 
