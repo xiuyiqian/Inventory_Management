@@ -16,6 +16,7 @@ public class Storage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    //the name of the product
     private String skuCode;
     private Integer quantity;
 }
