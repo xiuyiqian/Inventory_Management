@@ -46,18 +46,21 @@ The backend is developed using the Spring framework, which handles HTTP requests
   - `skuCode` (the name of the product)
   - `quantity`
 
-## Interservice Communication
+# Interservice Communication
 
 To ensure seamless integration between the Order and Storage microservices, the system performs a synchronous HTTP call to the Storage service when placing an order. This call checks if there is enough inventory to support the order and validates the order.
 
-### Order Placement Flow
+## Order Placement Flow
 
 1. **Customer places an order**: The customer adds items to the cart and submits the order.
-2. **Order service validation**: The Order service validates the order details.
-3. **Inventory check**: The Order service makes a synchronous HTTP request to the Storage service to check inventory levels.
+2. **Order service validation**: The Order service validates the order details by generating an order number and mapping the order request items to real order items.
+3. **Inventory check**:
+   - The Order service extracts the SKU codes from the order items.
+   - It then makes a synchronous HTTP request to the Storage service to check the inventory levels for the requested SKU codes.
 4. **Order processing**:
-   - If the inventory is sufficient, the order is processed and saved.
-   - If the inventory is insufficient, the order is rejected.
+   - If the inventory is sufficient (i.e., all items are in stock), the order is processed and saved to the database.
+   - If the inventory is insufficient (i.e., one or more items are out of stock), the order is rejected with an appropriate message.
+
 
 ### Example of Interservice Communication
 
