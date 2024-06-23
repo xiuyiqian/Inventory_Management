@@ -2,7 +2,7 @@
 
 This project is an Inventory Management System designed to handle products and orders within an e-commerce platform. The design is based on the architecture depicted in the diagram below.
 
-<img src="./Inventory_Mangement.png" alt="Solution Architecture" style="width:100%;">
+<img src="./Inventory_Management.png" alt="Solution Architecture" style="width:100%;">
 
 ## Overview
 
@@ -39,19 +39,53 @@ The backend is developed using the Spring framework, which handles HTTP requests
   - `quantity`
   - `price`
 
-## Tests
+### Storage Data
 
-The project includes tests to ensure the functionality of the system. Below is an example test for creating a product.
+- **Database**: JPA (Java Persistence API)
+- **Fields**:
+  - `skuCode` (the name of the product)
+  - `quantity`
 
-### Test Implementation
-#### Product Post Test example
-The test class uses MockMvc to simulate HTTP requests, a Testcontainers MongoDB instance for an isolated database environment, and JUnit for test assertions.
+## Interservice Communication
+
+To ensure seamless integration between the Order and Storage microservices, the system performs a synchronous HTTP call to the Storage service when placing an order. This call checks if there is enough inventory to support the order and validates the order.
+
+### Order Placement Flow
+
+1. **Customer places an order**: The customer adds items to the cart and submits the order.
+2. **Order service validation**: The Order service validates the order details.
+3. **Inventory check**: The Order service makes a synchronous HTTP request to the Storage service to check inventory levels.
+4. **Order processing**:
+   - If the inventory is sufficient, the order is processed and saved.
+   - If the inventory is insufficient, the order is rejected.
+
+### Example of Interservice Communication
+
+#### Order Service
+
 ```java
-// Sends a POST request to create a new product and expects a 201 Created status
-mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/product")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonPostRequestString))
-        .andExpect(status().isCreated());
-// Verifies that the number of products in the repository is 1
-Assertions.assertEquals(1, productRepository.findAll().size());
-```
+@Service
+public class OrderService {
+    
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public String placeOrder(OrderRequest orderRequest) {
+        // Check inventory
+        Boolean isInventoryAvailable = restTemplate.postForObject(
+                "http://storage-service/api/v1/check-inventory", 
+                orderRequest.getOrderLists_Copy(), 
+                Boolean.class);
+        
+        if (Boolean.TRUE.equals(isInventoryAvailable)) {
+            // Save the order
+            orderRepository.save(orderRequest.toOrder());
+            return "Order Placed Successfully";
+        } else {
+            return "Order Failed: Insufficient Inventory";
+        }
+    }
+}
