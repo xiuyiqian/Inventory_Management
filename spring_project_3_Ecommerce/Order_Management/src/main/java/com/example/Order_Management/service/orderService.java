@@ -17,11 +17,11 @@ import java.util.UUID;
 public class orderService {
 
     private final orderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     @Autowired
-    public orderService(orderRepository repository, WebClient webClient) {
-        this.webClient = webClient;
+    public orderService(orderRepository repository, WebClient.Builder webClient) {
+        this.webClientBuilder = webClient;
         this.orderRepository = repository;
     }
 
@@ -38,7 +38,7 @@ public class orderService {
                 map(OrderOneItem::getSkuCode).toList();
         System.out.println("skuCode List: "+skuCodeList);
         //check storage availability
-        StorageResponse[] storageResponsesList = webClient.get()
+        StorageResponse[] storageResponsesList = webClientBuilder.build().get()
                 .uri("http://StorageManagement/api/v2/storage",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodeList).build())
                 .retrieve()
