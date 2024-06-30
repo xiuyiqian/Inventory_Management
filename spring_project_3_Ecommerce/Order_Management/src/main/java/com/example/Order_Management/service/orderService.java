@@ -39,7 +39,7 @@ public class orderService {
         System.out.println("skuCode List: "+skuCodeList);
         //check storage availability
         StorageResponse[] storageResponsesList = webClient.get()
-                .uri("http://localhost:8082/api/v2/storage",
+                .uri("http://StorageManagement/api/v2/storage",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodeList).build())
                 .retrieve()
                 .bodyToMono(StorageResponse[].class)
@@ -47,7 +47,7 @@ public class orderService {
         if (storageResponsesList.length != skuCodeList.size()){
             throw new IllegalArgumentException("Sorry, Product is not in stock");
         }
-        //System.out.println("Storage Reponse List " + storageResponsesList[0].toString());
+        System.out.println("Storage Reponse List " + storageResponsesList[0].toString());
 
         boolean allAvailableItems = Arrays.stream(storageResponsesList).allMatch(
                 StorageResponse::isInStock

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/IPDictionary/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/IP_Dictionary/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/IP_Management/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/IP_Mangagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Order_Management/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Order_Management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Product_Management/src/main/java" charset="UTF-8" />
@@ -9,5 +13,6 @@
     <file url="file://$PROJECT_DIR$/Storage_Management/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/untitled/src/main/java" charset="UTF-8" />
   </component>
 </project>
