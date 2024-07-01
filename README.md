@@ -94,34 +94,41 @@ To ensure seamless integration between the Order and Storage microservices, the 
 
 
 
-### Test do nExample of Interservice Communication
+## Using MockMvc for Testing in Inventory Management System
 
-#### Order Service
+In this project, we use `MockMvc` to perform integration tests on our Spring Boot application's web layer. This allows us to test the behavior of our controllers and ensure they are handling HTTP requests correctly. Below is an example of how we use `MockMvc` to test the product creation functionality.
+
+### Setting Up the Test
+
+We use the following dependencies and annotations for setting up our test environment:
+
+- **Testcontainers**: To run a MongoDB container for testing purposes.
+- **Spring Boot Test**: To load the application context and enable web layer testing.
+- **MockMvc**: To perform HTTP requests and verify the responses.
+- **ObjectMapper**: To serialize and deserialize JSON objects.
+
+### MongoDB Container for testing
+To ensure our tests run in an isolated and consistent environment, we use a MongoDB container provided by Testcontainers. This approach allows us to spin up a fresh MongoDB instance for each test run, ensuring that tests do not interfere with each other and have a predictable state.
+
+### Test Example
+
+Here is an example test case that demonstrates how to use `MockMvc` to test the creation of a product:
 
 ```java
-@Service
-public class OrderService {
-    
-    @Autowired
-    private RestTemplate restTemplate;
+	@DynamicPropertySource
+	static void setProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+	}
 
-    @Autowired
-    private OrderRepository orderRepository;
+	@Test
+	void shouldCreateProduct() throws Exception {
 
-    public String placeOrder(OrderRequest orderRequest) {
-        // Check inventory
-        Boolean isInventoryAvailable = restTemplate.postForObject(
-                "http://storage-service/api/v1/check-inventory", 
-                orderRequest.getOrderLists_Copy(), 
-                Boolean.class);
-        
-        if (Boolean.TRUE.equals(isInventoryAvailable)) {
-            // Save the order
-            orderRepository.save(orderRequest.toOrder());
-            return "Order Placed Successfully";
-        } else {
-            return "Order Failed: Insufficient Inventory";
-        }
-    }
-}
+		ProductRequest productRequest = getProductRequest();
+		String jsonPostRequestString = objectMapper.writeValueAsString(productRequest);
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/product")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(jsonPostRequestString))
+				.andExpect(status().isCreated());
 
+		Assertions.assertEquals(1, productRepository.findAll().size());
+	}

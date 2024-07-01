@@ -53,14 +53,14 @@ class InventoryManagementApplicationTests {
 	@Test
 	void shouldCreateProduct() throws Exception {
 
-		ProductRequest productRequest =  getProductRequest();
+		ProductRequest productRequest = getProductRequest();
 		String jsonPostRequestString = objectMapper.writeValueAsString(productRequest);
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/v2/product")
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(jsonPostRequestString))
 				.andExpect(status().isCreated());
 
-        Assertions.assertEquals(1, productRepository.findAll().size());
+		Assertions.assertEquals(1, productRepository.findAll().size());
 	}
 
 	private ProductRequest getProductRequest() {
