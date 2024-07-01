@@ -20,6 +20,37 @@ The solution consists of several components interacting with each other to manag
 
 The backend is developed using the Spring framework, which handles HTTP requests through controllers, processes business logic in services, interacts with repositories for data persistence, and communicates with a database.
 
+## API Gateway Implementation
+
+The API Gateway in this project is implemented using Spring Cloud Gateway and Eureka for service discovery. It handles routing and load balancing between different services.
+
+### Structure and Architecture
+
+- **API Gateway (Spring Cloud Gateway)**
+  - **Service Discovery (Eureka)**
+    - Registers the API Gateway and backend services
+    - Enables dynamic discovery and routing to microservices
+  - **Routes**
+    - **Product Service Route**
+      - ID: `Product-Management`
+      - URI: Load-balanced URI for Product-Management service
+      - Predicate: Path matching `/api/v2/product`
+    - **Order Service Route**
+      - ID: `Order-Management`
+      - URI: Load-balanced URI for Order-Management service
+      - Predicate: Path matching `/api/v2/order`
+    - **IP Dictionary Service Route**
+      - ID: `server-management`
+      - URI: Direct URI to local Eureka server
+      - Predicate: Path matching `/eureka/web`
+      - Filter: SetPath to `/`
+  - **Logging**
+    - INFO level for general logs
+    - TRACE level for detailed gateway operations logs
+
+This architecture ensures that the API Gateway efficiently manages traffic to various microservices, enhancing the scalability and reliability of the overall system.
+
+
 ## Data Storage
 
 ### Product Data
@@ -62,7 +93,8 @@ To ensure seamless integration between the Order and Storage microservices, the 
    - If the inventory is insufficient (i.e., one or more items are out of stock), the order is rejected with an appropriate message.
 
 
-### Example of Interservice Communication
+
+### Test do nExample of Interservice Communication
 
 #### Order Service
 
@@ -92,3 +124,4 @@ public class OrderService {
         }
     }
 }
+
