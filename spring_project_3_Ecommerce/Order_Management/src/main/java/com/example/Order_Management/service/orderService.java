@@ -39,7 +39,7 @@ public class orderService {
         System.out.println("skuCode List: "+skuCodeList);
         //check storage availability
         StorageResponse[] storageResponsesList = webClientBuilder.build().get()
-                .uri("http://StorageManagement/api/v2/storage",
+                .uri("http://Storage-Management/api/v2/storage",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodeList).build())
                 .retrieve()
                 .bodyToMono(StorageResponse[].class)

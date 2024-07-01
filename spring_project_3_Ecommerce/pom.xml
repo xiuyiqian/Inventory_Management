@@ -20,6 +20,7 @@
         <module>Storage_Management</module>
         <module>Product_Management</module>
         <module>IP_Management</module>
+        <module>Api_Gateway</module>
     </modules>
 
     <properties>
