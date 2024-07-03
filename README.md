@@ -24,6 +24,22 @@ The backend is developed using the Spring framework, which handles HTTP requests
 
 The API Gateway in this project is implemented using Spring Cloud Gateway and Eureka for service discovery. It handles routing and load balancing between different services.
 
+## Eureka Server
+
+This repository contains the configuration for an Eureka Server, which is used as a service registry for microservices. Eureka Server enables microservices to discover each other and manage their instances dynamically.
+
+### **Multi-instance Support**
+
+- **Load Balancing**
+  - Distributes incoming requests across all available instances to optimize performance and resource utilization.
+- **Fault Tolerance**
+  - If one instance fails, other instances can take over, ensuring the service remains available.
+- **Health Monitoring**
+  - Regularly checks the health of each instance and removes any that are not responding, ensuring that only healthy instances are used.
+
+## Example Configuration for a Microservice Registering with Eureka
+
+
 ### Structure and Architecture
 
 - **API Gateway (Spring Cloud Gateway)**
